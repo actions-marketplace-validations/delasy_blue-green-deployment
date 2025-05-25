@@ -35,6 +35,9 @@ inputs:
     description: Remove specified number of leading path elements when unpacking tar file
     default: 1
     required: true
+  script:
+    description: Optional script to execute in the target directory before PM2 operations, eg. npm run migrate
+    required: false
 
 runs:
   using: composite
@@ -52,6 +55,7 @@ runs:
         INPUT_BLUE_PORT: ${{ inputs.blue-port }}
         INPUT_GREEN_PORT: ${{ inputs.green-port }}
         INPUT_STRIP_COMPONENTS: ${{ inputs.strip-components }}
+        INPUT_SCRIPT: ${{ inputs.script }}
 
 branding:
   icon: cloud

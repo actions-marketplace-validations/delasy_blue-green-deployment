@@ -6,6 +6,7 @@ BLUE_PORT="$INPUT_BLUE_PORT"
 GREEN_PORT="$INPUT_GREEN_PORT"
 NAME="$INPUT_NAME"
 STRIP_COMPONENTS="$INPUT_STRIP_COMPONENTS"
+SCRIPT="$INPUT_SCRIPT"
 
 BASE_DIR="/apps/$NAME"
 NGINX_CONFIG="/etc/nginx/sites-available/$NAME"
@@ -28,6 +29,12 @@ TARGET_CONFIG="$TARGET_DIR/ecosystem.config.js"
 rm -rf "${TARGET_DIR:?}/"* "${TARGET_DIR:?}/".*
 tar --overwrite "--strip-components=$STRIP_COMPONENTS" -xzf "$NAME.tgz" -C "$TARGET_DIR"
 sed -i -e "s/\$TARGET_PORT/$TARGET_PORT/" -e "s/\$TARGET/$TARGET/" "$TARGET_CONFIG"
+
+if [ -n "$SCRIPT" ]; then
+  cd "$TARGET_DIR"
+  eval "$SCRIPT"
+  cd -
+fi
 
 pm2 start "$TARGET_CONFIG" --env production
 pm2 stop --silent "$CURRENT_CONFIG" || :

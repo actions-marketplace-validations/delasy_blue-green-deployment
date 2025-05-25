@@ -17,19 +17,21 @@ This action provides the following functionality for GitHub Actions users:
 
 See [action.yml](action.yml) for more detailed information.
 
-| Name             | Description                                 | Example    | Default Value |
-| ---------------- | ------------------------------------------- | ---------- | ------------- |
-| name             | Name of the project, usually project domain | delasy.com |               |
-| host             | Remote host address                         | 1.1.1.1    |               |
-| port             | Remote port number                          | 22         | 22            |
-| username         | Remote username                             | ubuntu     |               |
-| password         | Remote password                             |            |               |
-| private-key      | Contents of private SSH key                 |            |               |
-| source           | Source directory path                       | ./build    |               |
-| blue-port        | NGINX blue port                             | 3000       | 3000          |
-| green-port       | NGINX green port                            | 3001       | 3001          |
-| strip-components | Remove specified number of leading path     | 1          | 1             |
-|                  | elements when unpacking tar file            |            |               |
+| Name             | Description                                 | Example         | Default Value |
+| ---------------- | ------------------------------------------- | --------------- | ------------- |
+| name             | Name of the project, usually project domain | delasy.com      |               |
+| host             | Remote host address                         | 1.1.1.1         |               |
+| port             | Remote port number                          | 22              | 22            |
+| username         | Remote username                             | ubuntu          |               |
+| password         | Remote password                             |                 |               |
+| private-key      | Contents of private SSH key                 |                 |               |
+| source           | Source directory path                       | ./build         |               |
+| blue-port        | NGINX blue port                             | 3000            | 3000          |
+| green-port       | NGINX green port                            | 3001            | 3001          |
+| strip-components | Remove specified number of leading path     | 1               | 1             |
+|                  | elements when unpacking tar file            |                 |               |
+| script           | Optional script to execute in target        | npm run migrate |               |
+|                  | directory before PM2 operations             |                 |               |
 
 ## Usage
 
@@ -46,6 +48,22 @@ steps:
       username: ${{ secrets.USERNAME }}
       password: ${{ secrets.PASSWORD }}
       source: ./build
+```
+
+Example with a script and private key:
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+
+  - uses: delasy/blue-green-deployment@v1
+    with:
+      name: example.com
+      host: ${{ secrets.HOST }}
+      username: ubuntu
+      private-key: ${{ secrets.KEY }}
+      source: ./build
+      script: npm run migrate
 ```
 
 ## License
